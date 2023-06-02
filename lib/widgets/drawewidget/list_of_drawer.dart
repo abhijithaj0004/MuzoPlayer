@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:muzo/screens/home/main_screen.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DrawerList extends StatelessWidget {
   const DrawerList({super.key});
@@ -20,12 +21,31 @@ class DrawerList extends StatelessWidget {
         SizedBox(
           height: 7,
         ),
-        settings(
-          title: 'Privacy Policy',
-          icon: Icons.privacy_tip_outlined,
-          toNextPage: () {
-            
+        ListTile(
+          onTap: () async {
+            // final url = 'https://abhijithaj0004.github.io';
+            // if (await canLaunchUrl()) {
+            await launchUrl(
+                Uri.https('abhijithaj0004.github.io', '/Muzo_privacy_policy/'));
+            // }
           },
+          title: Text(
+            'Privacy Policy',
+            style: TextStyle(
+              fontSize: 20,
+              color: Color.fromARGB(255, 255, 255, 255),
+              fontFamily: 'KumbhSans',
+              // fontWeight: FontWeight.bold,
+            ),
+          ),
+          leading: CircleAvatar(
+            radius: 20,
+            child: Icon(
+              Icons.privacy_tip_outlined,
+              color: Colors.grey,
+            ),
+            backgroundColor: Colors.white,
+          ),
         ),
         SizedBox(
           height: 7,

@@ -3,8 +3,9 @@ import 'package:muzo/functions/dbfunctions/playlist_db.dart';
 import 'package:muzo/screens/playlist/inside_the_playlist.dart';
 
 class PlayList extends StatelessWidget {
+  final _key = GlobalKey<FormState>();
   PlayList({super.key});
-  TextEditingController editController = TextEditingController();
+  final TextEditingController editController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     getAllPlaylist();
@@ -13,7 +14,7 @@ class PlayList extends StatelessWidget {
         Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height / 2.5,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
               gradient: LinearGradient(colors: [
                 Color.fromARGB(255, 108, 99, 255),
                 Color.fromARGB(79, 107, 99, 255),
@@ -34,7 +35,7 @@ class PlayList extends StatelessWidget {
                     Icons.arrow_back_ios_new_rounded,
                     color: Colors.white,
                   )),
-              SizedBox(
+              const SizedBox(
                 width: 100,
               ),
               const Text(
@@ -54,20 +55,20 @@ class PlayList extends StatelessWidget {
               valueListenable: playList,
               builder: (context, playlistValue, child) {
                 if (playlistValue.isEmpty) {
-                  return Center(
+                  return const Center(
                     child: Text(
                       'No playlist found',
                     ),
                   );
                 }
                 return ListView.builder(
-                  physics: BouncingScrollPhysics(),
+                  physics: const BouncingScrollPhysics(),
                   itemBuilder: (context, index) {
                     return Container(
-                        margin: EdgeInsets.only(bottom: 20),
+                        margin: const EdgeInsets.only(bottom: 20),
                         height: 90,
                         decoration: BoxDecoration(
-                            gradient: LinearGradient(colors: [
+                            gradient: const LinearGradient(colors: [
                               Color.fromARGB(255, 203, 203, 203),
                               Color.fromARGB(0, 207, 207, 207),
                             ]),
@@ -75,6 +76,8 @@ class PlayList extends StatelessWidget {
                         child: Center(
                           child: ListTile(
                             onTap: () {
+                              getAllPlaylistSongs(
+                                  playlistValue[index].playListName);
                               Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => InsidePlaylist(),
                               ));
@@ -95,33 +98,47 @@ class PlayList extends StatelessWidget {
                               child: Text(
                                 playlistValue[index].playListName,
                                 overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontSize: 20, fontFamily: 'KumbhSans'),
                               ),
                             ),
                             trailing: PopupMenuButton(
-                              icon: Icon(Icons.more_vert),
+                              icon: const Icon(Icons.more_vert),
                               onSelected: (value) {
                                 value == 1
                                     ? showDialog(
                                         context: context,
                                         builder: ((context) {
                                           return AlertDialog(
-                                            title: Text('EDIT PLAYLIST NAME'),
-                                            content: TextFormField(
-                                              controller: editController,
-                                              decoration: InputDecoration(
-                                                  hintText: 'Playlist Name'),
+                                            title: const Text(
+                                                'EDIT PLAYLIST NAME'),
+                                            content: Form(
+                                              key: _key,
+                                              child: TextFormField(
+                                                validator: (value) {
+                                                  if (value == null ||
+                                                      value.isEmpty) {
+                                                    return 'Name is required';
+                                                  }
+                                                },
+                                                controller: editController,
+                                                decoration: InputDecoration(
+                                                    hintText: 'Playlist Name'),
+                                              ),
                                             ),
                                             actions: [
                                               TextButton.icon(
-                                                  onPressed: () async {
-                                                    await updatePlaylistname(
-                                                        editController.text
-                                                            .trim(),
-                                                        playlistValue[index]);
+                                                  onPressed: () {
+                                                    if (_key.currentState!
+                                                        .validate()) {
+                                                      updatePlaylistname(
+                                                          editController.text
+                                                              .trim(),
+                                                          playlistValue[index]);
 
-                                                    Navigator.of(context).pop();
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    }
                                                   },
                                                   icon: Icon(
                                                     Icons.check_sharp,

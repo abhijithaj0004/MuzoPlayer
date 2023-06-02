@@ -1,45 +1,17 @@
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:muzo/functions/normalfunctions/playSong.dart';
+import 'package:muzo/functions/normalfunctions/song_model_to_audio.dart';
+import 'package:muzo/screens/allsongs/allsongs.dart';
+import 'package:muzo/widgets/mini_player.dart';
+import 'package:on_audio_query/on_audio_query.dart';
 
-import 'package:muzo/widgets/RemovePopUp.dart';
-
+ValueNotifier<List<SongModel>> mostplayed = ValueNotifier([]);
 
 class TopBeats extends StatelessWidget {
-  void _showConfirmationDialog(BuildContext context, Function onConfirmed) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('PLEASE CONFIRM DELETION'),
-          actions: [
-            TextButton.icon(
-              onPressed: () {
-                onConfirmed();
-                Navigator.of(context).pop();
-              },
-              icon: Icon(
-                Icons.check,
-                color: Colors.green,
-              ),
-              label: Text('YES'),
-            ),
-            TextButton.icon(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              icon: Icon(
-                Icons.cancel,
-                color: Colors.red,
-              ),
-              label: Text('NO'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  const TopBeats({super.key});
+  List<Audio> mostPlayedSongs = convertToAudio(mostplayed.value);
+  TopBeats({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -85,50 +57,82 @@ class TopBeats extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.only(left: 20.0, top: 100, right: 20),
-          child: ListView.builder(
-            physics: const BouncingScrollPhysics(),
-            itemBuilder: (context, index) {
-              return Container(
-                  margin: EdgeInsets.only(bottom: 20),
-                  height: 90,
-                  decoration: BoxDecoration(
-                      gradient: const LinearGradient(colors: [
-                        Color.fromARGB(255, 203, 203, 203),
-                        Color.fromARGB(0, 207, 207, 207),
-                      ]),
-                      borderRadius: BorderRadius.circular(12)),
-                  child: Center(
-                    child: ListTile(
-                      leading: SizedBox(
-                        width: 50,
-                        height: 80,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(12),
-                          child: Image.asset(
-                            'assets/images/filip-5LhSaUDgtZ8-unsplash.jpg',
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                      title: Padding(
-                        padding: const EdgeInsets.only(left: 10.0),
-                        child: Text(
-                          'Heat-Waves....',
-                          overflow: TextOverflow.ellipsis,
-                          style:
-                              TextStyle(fontSize: 20, fontFamily: 'KumbhSans'),
-                        ),
-                      ),
-                      trailing: RemovePopUp(onpressedClicked: (){},),
-                    ),
-                  ));
-            },
-            itemCount: 3,
-          ),
-        )
+          child: mostplayed.value.isEmpty
+              ? songListEmpty()
+              : ValueListenableBuilder(
+                  valueListenable: mostplayed,
+                  builder: (context, value, _) {
+                    return ListView.builder(
+                      physics: const BouncingScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        return Container(
+                            margin: EdgeInsets.only(bottom: 20),
+                            height: 90,
+                            decoration: BoxDecoration(
+                                gradient: const LinearGradient(colors: [
+                                  Color.fromARGB(255, 203, 203, 203),
+                                  Color.fromARGB(0, 207, 207, 207),
+                                ]),
+                                borderRadius: BorderRadius.circular(12)),
+                            child: Center(
+                              child: ListTile(
+                                onTap: () {
+                                  playSong(mostPlayedSongs, index);
+                                  showBottomSheet(
+                                    enableDrag: false,
+                                    backgroundColor: Colors.transparent,
+                                    context: context,
+                                    builder: (context) {
+                                      return player.builderCurrent(
+                                        builder: (context, playing) {
+                                          return MiniPlayer(
+                                            index: index,
+                                          );
+                                        },
+                                      );
+                                    },
+                                  );
+                                },
+                                leading: QueryArtworkWidget(
+                                  id: value[index].id,
+                                  type: ArtworkType.AUDIO,
+                                  artworkWidth: 50,
+                                  artworkHeight: 80,
+                                  artworkFit: BoxFit.cover,
+                                  artworkBorder: BorderRadius.circular(12),
+                                  nullArtworkWidget: SizedBox(
+                                    width: 50,
+                                    height: 80,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(12),
+                                      child: Image.asset(
+                                        'assets/images/filip-5LhSaUDgtZ8-unsplash.jpg',
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                title: Padding(
+                                  padding: const EdgeInsets.only(left: 10.0),
+                                  child: Text(
+                                    value[index].title,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        fontSize: 20, fontFamily: 'KumbhSans'),
+                                  ),
+                                ),
+                              ),
+                            ));
+                      },
+                      itemCount: value.length,
+                    );
+                  }),
+        ),
       ]),
     );
   }
+
+  songListEmpty() {
+    return Center(child: Text('No TopBeats'));
+  }
 }
-
-

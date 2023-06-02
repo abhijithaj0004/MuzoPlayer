@@ -11,7 +11,7 @@ class NowPlaying extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 211, 208, 255),
+      backgroundColor:const Color.fromARGB(255, 211, 208, 255),
       body: player.builderCurrent(builder: (context, playing) {
         ValueNotifier<bool> isLoopOn = ValueNotifier(false);
         ValueNotifier<bool> isShuffleOn = ValueNotifier(false);
@@ -19,12 +19,12 @@ class NowPlaying extends StatelessWidget {
 
         int id = int.parse(playing.audio.audio.metas.id!);
         return ListView(
-          physics: ScrollPhysics(),
+          physics: const ScrollPhysics(),
           children: [
             Container(
               width: MediaQuery.of(context).size.width,
               height: 400,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                   borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(100),
                       bottomRight: Radius.circular(300)),
@@ -45,11 +45,11 @@ class NowPlaying extends StatelessWidget {
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },
-                                icon: Icon(
+                                icon: const Icon(
                                   Icons.arrow_back_ios,
                                   color: Colors.white,
                                 )),
-                            Text(
+                            const Text(
                               'NOW PLAYING',
                               style: TextStyle(
                                   color: Colors.white,
@@ -57,7 +57,7 @@ class NowPlaying extends StatelessWidget {
                                   fontFamily: 'KumbhSans',
                                   fontSize: 20),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 50,
                             )
                           ],
@@ -72,7 +72,7 @@ class NowPlaying extends StatelessWidget {
                                 child: Marquee(
                                   text: playing.audio.audio.metas.title
                                       .toString(),
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                       color: Colors.white,
                                       fontSize: 25,
@@ -81,21 +81,22 @@ class NowPlaying extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   blankSpace: 20.0,
                                   velocity: 50.0,
-                                  pauseAfterRound: Duration(seconds: 1),
+                                  pauseAfterRound: const Duration(seconds: 1),
                                   startPadding: 10.0,
-                                  accelerationDuration: Duration(seconds: 1),
+                                  accelerationDuration:
+                                      const Duration(seconds: 1),
                                   accelerationCurve: Curves.linear,
                                   decelerationDuration:
-                                      Duration(milliseconds: 500),
+                                      const Duration(milliseconds: 500),
                                   decelerationCurve: Curves.easeOut,
                                 ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 10,
                               ),
                               Text(
                                 playing.audio.audio.metas.artist.toString(),
-                                style: TextStyle(
+                                style: const TextStyle(
                                     color: Color.fromARGB(255, 225, 216, 216),
                                     fontWeight: FontWeight.bold,
                                     fontFamily: 'KumbhSans',
@@ -110,17 +111,6 @@ class NowPlaying extends StatelessWidget {
                   Positioned(
                     bottom: 20,
                     left: 20,
-                    // child: SizedBox(
-                    //   width: 170,
-                    //   height: 170,
-                    //   child: ClipRRect(
-                    //     borderRadius: BorderRadius.circular(100),
-                    //     child: Image.asset(
-                    //       'assets/images/caucasian-woman-s-portrait-isolated-blue-background-multicolored-neon-light.jpg',
-                    //       fit: BoxFit.cover,
-                    //     ),
-                    //   ),
-                    // ),
                     child: QueryArtworkWidget(
                       id: id,
                       type: ArtworkType.AUDIO,
@@ -160,11 +150,11 @@ class NowPlaying extends StatelessWidget {
                           barHeight: 10,
                           thumbRadius: 10,
                           thumbColor: Colors.white,
-                          baseBarColor: Color.fromARGB(255, 188, 184, 249),
-                          progressBarColor: Color.fromARGB(255, 143, 136, 239),
+                          baseBarColor:const Color.fromARGB(255, 188, 184, 249),
+                          progressBarColor:const Color.fromARGB(255, 143, 136, 239),
                         );
                       }),
-                  SizedBox(
+                 const SizedBox(
                     height: 40,
                   ),
                   Row(
@@ -174,7 +164,7 @@ class NowPlaying extends StatelessWidget {
                         onTap: () async {
                           await player.previous();
                         },
-                        child: Icon(
+                        child:const Icon(
                           Icons.skip_previous,
                           color: Colors.white,
                           size: 80,
@@ -196,7 +186,7 @@ class NowPlaying extends StatelessWidget {
                         onTap: () async {
                           await player.next();
                         },
-                        child: Icon(
+                        child:const Icon(
                           Icons.skip_next,
                           color: Colors.white,
                           size: 80,
@@ -204,7 +194,7 @@ class NowPlaying extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(
+                 const SizedBox(
                     height: 40,
                   ),
                   Row(
@@ -227,12 +217,12 @@ class NowPlaying extends StatelessWidget {
                               valueListenable: isShuffleOn,
                               builder: (context, shuffleOn, child) {
                                 if (!shuffleOn) {
-                                  return Icon(
+                                  return const Icon(
                                     Icons.shuffle,
                                     color: Colors.black,
                                   );
                                 } else {
-                                  return Icon(
+                                  return const Icon(
                                     Icons.shuffle,
                                     color: Color.fromARGB(255, 106, 87, 255),
                                   );
@@ -257,12 +247,12 @@ class NowPlaying extends StatelessWidget {
                               valueListenable: isLoopOn,
                               builder: (context, loopOn, child) {
                                 if (!loopOn) {
-                                  return Icon(
+                                  return const Icon(
                                     Icons.repeat,
                                     color: Colors.black,
                                   );
                                 } else {
-                                  return Icon(
+                                  return const Icon(
                                     Icons.repeat,
                                     color: Color.fromARGB(255, 106, 87, 255),
                                   );
@@ -286,12 +276,12 @@ class NowPlaying extends StatelessWidget {
                             valueListenable: isFavOn,
                             builder: (context, favOn, child) {
                               if (!favOn) {
-                                return Icon(
+                                return const Icon(
                                   Icons.favorite_border,
                                   color: Colors.black,
                                 );
                               } else {
-                                return Icon(
+                                return const Icon(
                                   Icons.favorite,
                                   color: Color.fromARGB(255, 106, 87, 255),
                                 );

@@ -8,24 +8,24 @@ class RemovePopUp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton(
-      icon: Icon(Icons.more_vert),
+      icon: const Icon(Icons.more_vert),
       onSelected: (value) {
         showDialog(
             context: context,
             builder: ((context) {
               return AlertDialog(
-                title: Text('PLEASE CONFIRM DELETION'),
+                title: const Text('PLEASE CONFIRM DELETION'),
                 actions: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       TextButton.icon(
                           onPressed: onpressedClicked,
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.check,
                             color: Colors.green,
                           ),
-                          label: Text(
+                          label: const Text(
                             'YES',
                             style: TextStyle(color: Colors.black, fontSize: 15),
                           )),
@@ -33,11 +33,11 @@ class RemovePopUp extends StatelessWidget {
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.close_sharp,
                             color: Colors.red,
                           ),
-                          label: Text(
+                          label: const Text(
                             'NO',
                             style: TextStyle(color: Colors.black, fontSize: 15),
                           ))
@@ -49,9 +49,9 @@ class RemovePopUp extends StatelessWidget {
       },
       itemBuilder: (BuildContext context) {
         return <PopupMenuEntry>[
-          PopupMenuItem(
-            child: Text('Remove Song'),
+          const PopupMenuItem(
             value: 0,
+            child: Text('Remove Song'),
           ),
         ];
       },

@@ -67,20 +67,21 @@ class HomePage extends StatelessWidget {
                   Navigator.of(context).push(
                       MaterialPageRoute(builder: (context) => PlayList()));
                 },
-                child: imageCard(context,
-                    title: 'Playlists',
-                    image:
-                        'assets/images/caucasian-woman-s-portrait-isolated-blue-background-multicolored-neon-light.jpg'),
+                child: ImageCard(
+                    text: 'PlayLists',
+                    img:
+                        'assets/images/caucasian-woman-s-portrait-isolated-blue-background-multicolored-neon-light-min.jpg'),
               ),
               GestureDetector(
                 onTap: () {
                   Navigator.of(context).push(
                       MaterialPageRoute(builder: (context) => TopBeats()));
                 },
-                child: imageCard(context,
-                    title: 'Top Beats',
-                    image:
-                        'assets/images/close-up-musical-keys-indoors-with-beautiful-lighting.jpg'),
+                child: ImageCard(
+                  img:
+                      'assets/images/close-up-musical-keys-indoors-with-beautiful-lighting-min.jpg',
+                  text: 'Top Beats',
+                ),
               ),
             ],
           ),
@@ -101,6 +102,62 @@ class HomePage extends StatelessWidget {
             ),
           ),
           Expanded(child: MusicListTile())
+        ],
+      ),
+    );
+  }
+}
+
+class ImageCard extends StatelessWidget {
+  final String text;
+  final String img;
+  const ImageCard({
+    super.key,
+    required this.text,
+    required this.img,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      elevation: 8,
+      child: Stack(
+        children: [
+          SizedBox(
+            width: MediaQuery.of(context).size.width * .38,
+            height: MediaQuery.of(context).size.height * .2,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12.0),
+              child: Image.asset(
+                img,
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          Positioned(
+            top: MediaQuery.of(context).size.height * .14,
+            child: Container(
+              width: MediaQuery.of(context).size.width * .38,
+              height: MediaQuery.of(context).size.height * 0.06,
+              decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(12),
+                      bottomRight: Radius.circular(12)),
+                  color: Color.fromARGB(101, 204, 193, 193)),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  text,
+                  style: const TextStyle(
+                    fontSize: 17,
+                    fontFamily: 'KumbhSans',
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          )
         ],
       ),
     );

@@ -1,17 +1,27 @@
+// ignore_for_file: must_be_immutable
+
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:muzo/functions/normalfunctions/playSong.dart';
+import 'package:muzo/functions/normalfunctions/song_model_to_audio.dart';
+import 'package:muzo/screens/allsongs/allsongs.dart';
+import 'package:muzo/widgets/mini_player.dart';
+import 'package:on_audio_query/on_audio_query.dart';
+
+ValueNotifier<List<SongModel>> playListNotifier = ValueNotifier([]);
 
 class InsidePlaylist extends StatelessWidget {
-  const InsidePlaylist({super.key});
-
+ late List<Audio> playListSongList = [];
+  InsidePlaylist({super.key});
   @override
   Widget build(BuildContext context) {
+    playListSongList = convertToAudio(playListNotifier.value);
     return Scaffold(
       body: Stack(children: [
         Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height / 2.5,
-          decoration: BoxDecoration(
+          decoration:const BoxDecoration(
               gradient: LinearGradient(colors: [
                 Color.fromARGB(255, 108, 99, 255),
                 Color.fromARGB(79, 107, 99, 255),
@@ -32,7 +42,7 @@ class InsidePlaylist extends StatelessWidget {
                     Icons.arrow_back_ios_new_rounded,
                     color: Colors.white,
                   )),
-              SizedBox(
+           const   SizedBox(
                 width: 100,
               ),
               const Text(
@@ -48,64 +58,85 @@ class InsidePlaylist extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.only(left: 20.0, top: 100, right: 20),
-          child: ListView.builder(
-            physics: BouncingScrollPhysics(),
-            itemBuilder: (context, index) {
-              return Container(
-                  margin: EdgeInsets.only(bottom: 20),
-                  height: 90,
-                  decoration: BoxDecoration(
-                      gradient: LinearGradient(colors: [
-                        Color.fromARGB(255, 203, 203, 203),
-                        Color.fromARGB(0, 207, 207, 207),
-                      ]),
-                      borderRadius: BorderRadius.circular(12)),
-                  child: Center(
-                    child: ListTile(
-                      onTap: () {},
-                      leading: SizedBox(
-                        width: 50,
-                        height: 80,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(12),
-                          child: Image.asset(
-                            'assets/images/filip-5LhSaUDgtZ8-unsplash.jpg',
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                      title: Padding(
-                        padding: const EdgeInsets.only(left: 10.0),
-                        child: Text(
-                          'Heat-Waves...',
-                          overflow: TextOverflow.ellipsis,
-                          style:
-                              TextStyle(fontSize: 20, fontFamily: 'KumbhSans'),
-                        ),
-                      ),
-                      subtitle: Padding(
-                        padding: const EdgeInsets.only(left: 10.0),
-                        child: Text('<Unknown>'),
-                      ),
-                      trailing: PopupMenuButton(
-                        icon: Icon(Icons.more_vert),
-                        onSelected: (value) {
-                          playListPopUp(context);
-                        },
-                        itemBuilder: (BuildContext context) {
-                          return <PopupMenuEntry>[
-                            PopupMenuItem(
-                              child: Text('Remove'),
-                              value: 0,
+          child: ValueListenableBuilder(
+              valueListenable: playListNotifier,
+              builder: (context, playlistvalue, _) {
+                return ListView.builder(
+                  physics:const BouncingScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    return Container(
+                        margin:const EdgeInsets.only(bottom: 20),
+                        height: 90,
+                        decoration: BoxDecoration(
+                            gradient:const LinearGradient(colors: [
+                              Color.fromARGB(255, 203, 203, 203),
+                              Color.fromARGB(0, 207, 207, 207),
+                            ]),
+                            borderRadius: BorderRadius.circular(12)),
+                        child: Center(
+                          child: ListTile(
+                            onTap: () {
+                              playSong(playListSongList, index);
+                              showBottomSheet(
+                                enableDrag: false,
+                                backgroundColor: Colors.transparent,
+                                context: context,
+                                builder: (context) {
+                                  return player.builderCurrent(
+                                    builder: (context, playing) {
+                                      return MiniPlayer(
+                                        index: index,
+                                      );
+                                    },
+                                  );
+                                },
+                              );
+                            },
+                            leading: SizedBox(
+                              width: 50,
+                              height: 80,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(12),
+                                child: Image.asset(
+                                  'assets/images/filip-5LhSaUDgtZ8-unsplash.jpg',
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
                             ),
-                          ];
-                        },
-                      ),
-                    ),
-                  ));
-            },
-            itemCount: 3,
-          ),
+                            title:const Padding(
+                              padding:  EdgeInsets.only(left: 10.0),
+                              child: Text(
+                                'Heat-Waves...',
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                    fontSize: 20, fontFamily: 'KumbhSans'),
+                              ),
+                            ),
+                            subtitle:const Padding(
+                              padding:  EdgeInsets.only(left: 10.0),
+                              child: Text('<Unknown>'),
+                            ),
+                            trailing: PopupMenuButton(
+                              icon:const Icon(Icons.more_vert),
+                              onSelected: (value) {
+                                playListPopUp(context);
+                              },
+                              itemBuilder: (BuildContext context) {
+                                return <PopupMenuEntry>[
+                                const  PopupMenuItem(
+                                  
+                                    value: 0,
+                                      child:  Text('Remove'),
+                                  ),
+                                ];
+                              },
+                            ),
+                          ),
+                        ));
+                  },
+                  itemCount: playlistvalue.length,
+                );
+              }),
         )
       ]),
     );
@@ -116,21 +147,21 @@ class InsidePlaylist extends StatelessWidget {
         context: context,
         builder: ((context) {
           return AlertDialog(
-            title: Text('PLEASE CONFIRM DELETION'),
+            title:const Text('PLEASE CONFIRM DELETION'),
             actions: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   TextButton.icon(
                       onPressed: () {
-                        print('Deleted');
+                       
                         Navigator.of(context).pop();
                       },
-                      icon: Icon(
+                      icon:const Icon(
                         Icons.check,
                         color: Colors.green,
                       ),
-                      label: Text(
+                      label:const Text(
                         'YES',
                         style: TextStyle(color: Colors.black, fontSize: 15),
                       )),
@@ -138,11 +169,11 @@ class InsidePlaylist extends StatelessWidget {
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
-                      icon: Icon(
+                      icon:const Icon(
                         Icons.close_sharp,
                         color: Colors.red,
                       ),
-                      label: Text(
+                      label:const Text(
                         'NO',
                         style: TextStyle(color: Colors.black, fontSize: 15),
                       ))

@@ -1,6 +1,7 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:muzo/functions/dbfunctions/recentdb.dart';
+import 'package:muzo/functions/dbfunctions/top_beats_db.dart';
 import 'package:muzo/screens/allsongs/allsongs.dart';
 import 'package:muzo/screens/nowplaying/now_playing.dart';
 import 'package:on_audio_query/on_audio_query.dart';
@@ -42,9 +43,11 @@ class _MiniPlayerState extends State<MiniPlayer> {
                 if (item.id == id) {
                   currentPLaying = item;
                   recentAdd(currentPLaying!);
+                  mostplayedadd(currentPLaying!);
                   break;
                 }
               }
+
               return Row(
                 children: [
                   Padding(

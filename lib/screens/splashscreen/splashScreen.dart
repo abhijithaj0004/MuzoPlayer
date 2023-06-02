@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:muzo/functions/dbfunctions/top_beats_db.dart';
 import 'package:muzo/model/favmodel/fav_model.dart';
 import 'package:muzo/screens/allsongs/allsongs.dart';
 import 'package:muzo/screens/favourites/favourites.dart';
 import 'package:muzo/screens/home/homepage.dart';
 import 'package:muzo/screens/home/main_screen.dart';
+import 'package:muzo/screens/topbeats/topbeats.dart';
 
 import 'package:muzo/screens/welcomescreens/intro_1.dart';
 import 'package:on_audio_query/on_audio_query.dart';
@@ -82,6 +84,7 @@ Future<void> fetchAllSongs() async {
 
 fetchRecent() async {
   fetchFav();
+  fetchmostplayed();
   final Box<int> recentDb = await Hive.openBox('recent_Db');
   List<SongModel> recenttemp = [];
   for (int element in recentDb.values) {

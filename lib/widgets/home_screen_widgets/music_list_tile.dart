@@ -13,7 +13,7 @@ class MusicListTile extends StatelessWidget {
     super.key,
   });
   songListEmpty() {
-    return Center(
+    return const Center(
       child: Text('No Songs in recent'),
     );
   }
@@ -28,13 +28,13 @@ class MusicListTile extends StatelessWidget {
             return recentList.value.isEmpty
                 ? songListEmpty()
                 : ListView.builder(
-                    physics: BouncingScrollPhysics(),
+                    physics:const BouncingScrollPhysics(),
                     itemBuilder: (context, index) {
                       return Container(
-                          margin: EdgeInsets.only(bottom: 20),
+                          margin:const EdgeInsets.only(bottom: 20),
                           height: 90,
                           decoration: BoxDecoration(
-                              gradient: LinearGradient(colors: [
+                              gradient:const LinearGradient(colors: [
                                 Color.fromARGB(255, 203, 203, 203),
                                 Color.fromARGB(0, 207, 207, 207),
                               ]),
@@ -82,7 +82,7 @@ class MusicListTile extends StatelessWidget {
                                 child: Text(
                                   recentList.value[index].title,
                                   overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
+                                  style:const TextStyle(
                                       fontSize: 17,
                                       fontFamily: 'KumbhSans',
                                       fontWeight: FontWeight.bold),

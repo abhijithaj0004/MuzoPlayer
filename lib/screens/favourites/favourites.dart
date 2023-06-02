@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:muzo/functions/dbfunctions/fav_db.dart';
@@ -25,13 +27,13 @@ class Favourites extends StatelessWidget {
             ? Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: ListView.builder(
-                  physics: BouncingScrollPhysics(),
+                  physics:const BouncingScrollPhysics(),
                   itemBuilder: (context, indx) {
                     return Container(
-                      margin: EdgeInsets.only(bottom: 20),
+                      margin:const EdgeInsets.only(bottom: 20),
                       height: 90,
                       decoration: BoxDecoration(
-                          gradient: LinearGradient(colors: [
+                          gradient:const LinearGradient(colors: [
                             Color.fromARGB(255, 203, 203, 203),
                             Color.fromARGB(0, 207, 207, 207),
                           ]),
@@ -80,7 +82,7 @@ class Favourites extends StatelessWidget {
                               child: Text(
                                 favouritelist.value[indx].displayNameWOExt,
                                 overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
+                                style:const TextStyle(
                                     fontSize: 20, fontFamily: 'KumbhSans'),
                               ),
                             ),
@@ -100,7 +102,7 @@ class Favourites extends StatelessWidget {
                   itemCount: favouritelist.value.length,
                 ),
               )
-            : Center(
+            :const Center(
                 child: Text('Please add songs to favourites'),
               );
       },

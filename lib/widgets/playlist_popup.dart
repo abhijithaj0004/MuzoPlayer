@@ -2,15 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:muzo/functions/dbfunctions/playlist_db.dart';
 import 'package:muzo/model/playlistmodel/playlist_model.dart';
+import 'package:muzo/screens/allsongs/allsongs.dart';
 
 class PlayListPopUp extends StatelessWidget {
-  PlayListPopUp({super.key});
+  final _formKey = GlobalKey<FormState>();
+  final int songId;
+  PlayListPopUp({super.key, required this.songId});
   TextEditingController playlistController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     getAllPlaylist();
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           gradient: LinearGradient(colors: [
             Color.fromARGB(255, 108, 99, 255),
             Color.fromARGB(79, 107, 99, 255),
@@ -22,12 +25,12 @@ class PlayListPopUp extends StatelessWidget {
         padding: const EdgeInsets.only(top: 20.0),
         child: Column(
           children: [
-            Text(
+            const Text(
               'ADD TO PLAYLIST',
               style: TextStyle(
                   color: Colors.white, fontSize: 20, fontFamily: 'KumbhSans'),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Container(
@@ -40,22 +43,40 @@ class PlayListPopUp extends StatelessWidget {
                     context: context,
                     builder: (context) {
                       return AlertDialog(
-                        title: Text('Add New PLaylist'),
-                        content: TextFormField(
-                          controller: playlistController,
-                          decoration: InputDecoration(hintText: 'PlaylistName'),
-                        ),
+                        title: const Text('Add New PLaylist'),
+                        content: Form(
+                          key: _formKey,
+                          child: TextFormField(
+                            controller: playlistController,
+                            decoration:
+                                const InputDecoration(hintText: 'PlaylistName'),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Enter PlayListName';
+                              }
+                              return null;
+                            },
+                          ),
+                        ), 
                         actions: [
                           TextButton(
                             onPressed: () {
-                              PlayListModel newPlaylist = PlayListModel(
-                                  playListName: playlistController.text.trim(),
-                                  playlistId: []);
+                              if (_formKey.currentState!.validate()) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text('Processing Data')),
+                                );
 
-                              createPlayList(newPlaylist);
-                              Navigator.of(context).pop();
+                                PlayListModel newPlaylist = PlayListModel(
+                                    playListName:
+                                        playlistController.text.trim(),
+                                    playlistId: []);
+
+                                createPlayList(newPlaylist);
+                                Navigator.of(context).pop();
+                              }
                             },
-                            child: Text(
+                            child: const Text(
                               'SUBMIT',
                               style: TextStyle(color: Colors.black),
                             ),
@@ -65,20 +86,20 @@ class PlayListPopUp extends StatelessWidget {
                     },
                   );
                 },
-                icon: Icon(
+                icon: const Icon(
                   Icons.add,
                   color: Colors.white,
                   size: 30,
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Container(
-              margin: EdgeInsets.only(left: 20, bottom: 20),
+              margin: const EdgeInsets.only(left: 20, bottom: 20),
               width: double.infinity,
-              child: Text(
+              child: const Text(
                 'Playlists',
                 style: TextStyle(
                     color: Colors.white, fontSize: 20, fontFamily: 'KumbhSans'),
@@ -89,14 +110,19 @@ class PlayListPopUp extends StatelessWidget {
                   valueListenable: playList,
                   builder: (context, playlistBuild, child) {
                     return ListView.builder(
-                      physics: ScrollPhysics(parent: BouncingScrollPhysics()),
+                      physics:
+                          const ScrollPhysics(parent: BouncingScrollPhysics()),
                       itemBuilder: (context, index) {
-                        return Container(
+                        return SizedBox(
                           height: 80,
                           child: ListTile(
+                            onTap: () {
+                              addToPlaylistDb(
+                                  songId, playlistBuild[index].playListName);
+                            },
                             title: Text(
                               playlistBuild[index].playListName,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 17,
                                   fontFamily: 'KumbhSans'),
@@ -112,7 +138,6 @@ class PlayListPopUp extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            onTap: () {},
                           ),
                         );
                       },
