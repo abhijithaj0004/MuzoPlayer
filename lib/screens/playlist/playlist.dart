@@ -79,11 +79,10 @@ class PlayList extends StatelessWidget {
                         child: Center(
                           child: ListTile(
                             onTap: () {
-                              // getAllPlaylistSongs(
-                              //     playlistNotifier.value[index].name);
-
                               Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => InsidePlaylist(
+                                    playListName:
+                                        playlistNotifier.value[index].name,
                                     playlist: playlistNotifier.value[index]),
                               ));
                             },
@@ -135,18 +134,16 @@ class PlayList extends StatelessWidget {
                                             actions: [
                                               TextButton.icon(
                                                   onPressed: () {
-                                                    // if (_key.currentState!
-                                                    //     .validate()) {
-                                                    //   updatePlaylistname(
-                                                    //       editController.text
-                                                    //           .trim(),
-                                                    //     // playlistNotifier.value[index]
+                                                    if (_key.currentState!
+                                                        .validate()) {
+                                                      updatePlaylistname(
+                                                          index,
+                                                          editController.text
+                                                              .trim());
 
-                                                    //     );
-
-                                                    //   Navigator.of(context)
-                                                    //       .pop();
-                                                    // }
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    }
                                                   },
                                                   icon: Icon(
                                                     Icons.check_sharp,

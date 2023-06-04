@@ -1,9 +1,7 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:muzo/functions/dbfunctions/playlist_db.dart';
-import 'package:muzo/model/playlistmodel/playlist_model.dart';
-import 'package:muzo/screens/allsongs/allsongs.dart';
-import 'package:muzo/screens/playlist/inside_the_playlist.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 class PlayListPopUp extends StatelessWidget {
@@ -111,6 +109,7 @@ class PlayListPopUp extends StatelessWidget {
                             onTap: () {
                               songAddToPlaylist(
                                   playlistNotifier.value[index].name, song);
+                              Navigator.of(context).pop();
                             },
                             title: Text(
                               playlistNotifier.value[index].name,

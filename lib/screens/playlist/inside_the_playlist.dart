@@ -13,12 +13,12 @@ ValueNotifier<List<SongModel>> playListNotifierSongModel = ValueNotifier([]);
 
 class InsidePlaylist extends StatelessWidget {
   final EachPlaylist playlist;
-
-  late List<Audio> playListSongList = [];
-  InsidePlaylist({super.key,required this.playlist});
+  final String playListName;
+  const InsidePlaylist(
+      {super.key, required this.playlist, required this.playListName});
   @override
   Widget build(BuildContext context) {
-    playListSongList = convertToAudio(playListNotifierSongModel.value);
+    List<Audio> playListSongList = convertToAudio(playlist.container);
     return Scaffold(
       body: Stack(children: [
         Container(
@@ -48,13 +48,17 @@ class InsidePlaylist extends StatelessWidget {
               const SizedBox(
                 width: 100,
               ),
-              const Text(
-                'PLAYLISTS',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: 'KumbhSans',
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold),
+              SizedBox(
+                width: 200,
+                child: Text(
+                  playListName,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: 'KumbhSans',
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold),
+                ),
               )
             ],
           ),
@@ -64,83 +68,100 @@ class InsidePlaylist extends StatelessWidget {
           child: ValueListenableBuilder(
               valueListenable: playListNotifierSongModel,
               builder: (context, playlistvalue, _) {
-                return ListView.builder(
-                  physics: const BouncingScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    return Container(
-                        margin: const EdgeInsets.only(bottom: 20),
-                        height: 90,
-                        decoration: BoxDecoration(
-                            gradient: const LinearGradient(colors: [
-                              Color.fromARGB(255, 203, 203, 203),
-                              Color.fromARGB(0, 207, 207, 207),
-                            ]),
-                            borderRadius: BorderRadius.circular(12)),
-                        child: Center(
-                          child: ListTile(
-                            onTap: () {
-                              playSong(playListSongList, index);
-                              showBottomSheet(
-                                enableDrag: false,
-                                backgroundColor: Colors.transparent,
-                                context: context,
-                                builder: (context) {
-                                  return player.builderCurrent(
-                                    builder: (context, playing) {
-                                      return MiniPlayer(
-                                        index: index,
-                                      );
-                                    },
-                                  );
-                                },
-                              );
-                            },
-                            leading: SizedBox(
-                              width: 50,
-                              height: 80,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(12),
-                                child: Image.asset(
-                                  'assets/images/filip-5LhSaUDgtZ8-unsplash.jpg',
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                            title:  Padding(
-                              padding: EdgeInsets.only(left: 10.0),
-                              child: Text(
-                                playlist.container[index].displayName,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                    fontSize: 20, fontFamily: 'KumbhSans'),
-                              ),
-                            ),
-                            subtitle: const Padding(
-                              padding: EdgeInsets.only(left: 10.0),
-                              child: Text('<Unknown>'),
-                            ),
-                            trailing: PopupMenuButton(
-                              icon: const Icon(Icons.more_vert),
-                              onSelected: (value) {
-                                playListPopUp(context);
-                              },
-                              itemBuilder: (BuildContext context) {
-                                return <PopupMenuEntry>[
-                                  const PopupMenuItem(
-                                    value: 0,
-                                    child: Text('Remove'),
+                return playlist.container.isEmpty
+                    ? songIsEmpty()
+                    : ListView.builder(
+                        physics: const BouncingScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          return Container(
+                              margin: const EdgeInsets.only(bottom: 20),
+                              height: 90,
+                              decoration: BoxDecoration(
+                                  gradient: const LinearGradient(colors: [
+                                    Color.fromARGB(255, 203, 203, 203),
+                                    Color.fromARGB(0, 207, 207, 207),
+                                  ]),
+                                  borderRadius: BorderRadius.circular(12)),
+                              child: Center(
+                                child: ListTile(
+                                  onTap: () {
+                                    playSong(playListSongList, index);
+                                    showBottomSheet(
+                                      enableDrag: false,
+                                      backgroundColor: Colors.transparent,
+                                      context: context,
+                                      builder: (context) {
+                                        return player.builderCurrent(
+                                          builder: (context, playing) {
+                                            return MiniPlayer(
+                                              index: index,
+                                            );
+                                          },
+                                        );
+                                      },
+                                    );
+                                  },
+                                  leading: QueryArtworkWidget(
+                                    id: playlist.container[index].id,
+                                    type: ArtworkType.AUDIO,
+                                    artworkWidth: 50,
+                                    artworkHeight: 80,
+                                    artworkFit: BoxFit.cover,
+                                    artworkBorder: BorderRadius.circular(12),
+                                    nullArtworkWidget: SizedBox(
+                                      width: 50,
+                                      height: 80,
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(12),
+                                        child: Image.asset(
+                                          'assets/images/filip-5LhSaUDgtZ8-unsplash.jpg',
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
                                   ),
-                                ];
-                              },
-                            ),
-                          ),
-                        ));
-                  },
-                  itemCount:playlist.container.length,
-                );
+                                  title: Padding(
+                                    padding: EdgeInsets.only(left: 10.0),
+                                    child: Text(
+                                      playlist.container[index].displayName,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontFamily: 'KumbhSans'),
+                                    ),
+                                  ),
+                                  subtitle: const Padding(
+                                    padding: EdgeInsets.only(left: 10.0),
+                                    child: Text('<Unknown>'),
+                                  ),
+                                  trailing: PopupMenuButton(
+                                    icon: const Icon(Icons.more_vert),
+                                    onSelected: (value) {
+                                      playListPopUp(context);
+                                    },
+                                    itemBuilder: (BuildContext context) {
+                                      return <PopupMenuEntry>[
+                                        const PopupMenuItem(
+                                          value: 0,
+                                          child: Text('Remove'),
+                                        ),
+                                      ];
+                                    },
+                                  ),
+                                ),
+                              ));
+                        },
+                        itemCount: playlist.container.length,
+                      );
               }),
         )
       ]),
+    );
+  }
+
+  songIsEmpty() {
+    return Center(
+      child: Text('No Songs'),
     );
   }
 
