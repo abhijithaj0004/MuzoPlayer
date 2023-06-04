@@ -1,74 +1,89 @@
-import 'dart:developer';
-
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:muzo/model/playlistmodel/playlist_class.dart';
 import 'package:muzo/model/playlistmodel/playlist_model.dart';
-import 'package:muzo/screens/allsongs/allsongs.dart';
-import 'package:muzo/screens/playlist/inside_the_playlist.dart';
+import 'package:on_audio_query/on_audio_query.dart';
 
-ValueNotifier<List<PlayListModel>> playList = ValueNotifier([]);
-createPlayList(PlayListModel newPlaylist) async {
-  final playlistDb = await Hive.openBox<PlayListModel>('play_list_db');
-  await playlistDb.add(newPlaylist);
-  getAllPlaylist();
+ValueNotifier<List<EachPlaylist>> playlistNotifier = ValueNotifier([]);
+createPlayList(playListName) async {
+  playlistNotifier.value.add(EachPlaylist(name: playListName));
+  final Box<PlayListModel> playlistDb =
+      await Hive.openBox<PlayListModel>('play_list_db');
+  await playlistDb.put(playListName, PlayListModel(playListName: playListName));
+  playlistNotifier.notifyListeners();
 }
 
-getAllPlaylist() async {
-  final playlistDb = await Hive.openBox<PlayListModel>('play_list_db');
-  playList.value.clear();
-  playList.value.addAll(playlistDb.values);
-  playList.notifyListeners();
-  for (var i = 0; i < playList.value.length; i++) {
-    log('${playList.value[i].playlistId}');
-    // for (var j = 0; j < playList.value[i].playlistId!.length; j++) {
-    //   log('${playList.value[i].playlistId![j]} jkhjhjhgjhjghg');
-    // }
-  }
-}
+// getAllPlaylist() async {
+//   Box<PlayListModel> playlistDb = await Hive.openBox('play_list_db');
+//   playList.value.clear();
+//   playList.value.addAll(playlistDb.values);
+//   playList.notifyListeners();
+// }
 
-deletePlaylist(int id) async {
-  final playlistDb = await Hive.openBox<PlayListModel>('play_list_db');
-  await playlistDb.delete(id);
-  await getAllPlaylist();
-}
+// Future playlistAddDB(SongModel addingSong, String playlistName) async {
+//   Box<PlayListModel> playlistdb = await Hive.openBox('playlist');
 
-updatePlaylistname(String newName, PlayListModel oldPlayList) async {
-  final playlistDb = await Hive.openBox<PlayListModel>('play_list_db');
-  PlayListModel newPlayList =
-      PlayListModel(playListName: newName, playlistId: oldPlayList.playlistId);
-  await playlistDb.put(oldPlayList.key, newPlayList);
-  getAllPlaylist();
-}
+//   for (PlayListModel element in playlistdb.values) {
+//     if (element.playListName == playlistName) {
+//       var key = element.key;
+//       PlayListModel ubdatePlaylist = PlayListModel(playListName: playlistName);
+//       ubdatePlaylist.playlistId.addAll(element.playlistId);
+//       ubdatePlaylist.playlistId.add(addingSong.id);
+//       playlistdb.put(key, ubdatePlaylist);
+//       break;
+//     }
+//   }
+// }
 
-addToPlaylistDb(int id, String playlistName) async {
-  final playlistDb = await Hive.openBox<PlayListModel>('play_list_db');
-  for (var element in playlistDb.values) {
-    if (element.playListName == playlistName) {
-      var key = element.key;
-      PlayListModel updatePlaylistamodel =
-          PlayListModel(playListName: playlistName);
-      updatePlaylistamodel.playlistId?.addAll(element.playlistId!);
-      updatePlaylistamodel.playlistId?.add(id);
-      playlistDb.put(key, updatePlaylistamodel);
+deletePlaylist(String PlaylistName) async {
+  final Box<PlayListModel> playlistDb =
+      await Hive.openBox<PlayListModel>('play_list_db');
+  playlistDb.delete(PlaylistName);
+  for (EachPlaylist data in playlistNotifier.value) {
+    if (data.name == PlaylistName) {
+      playlistNotifier.value.remove(data);
+      break;
     }
   }
-  getAllPlaylist();
+  playlistNotifier.notifyListeners();
 }
 
-getAllPlaylistSongs(String playListName) async {
-  List<int> playListSongId = [];
-  final playlistDb = await Hive.openBox<PlayListModel>('play_list_db');
-  for (var element in playlistDb.values) {
-    if (element.playListName == playListName) {
-      log(element.playlistId!.length.toString());
-      playListSongId.addAll(element.playlistId!);
-    }
-  }
-  for (var i = 0; i < allsongs.length; i++) {
-    for (var j = 0; j < playListSongId.length; j++) {
-      if (allsongs[i].id == playListSongId[j].toString()) {
-        playListNotifier.value.add(allsongs[i]);
-      }
+// updatePlaylistname(String newName, PlayListModel oldPlayList) async {
+//   final playlistDb = await Hive.openBox<PlayListModel>('play_list_db');
+//   // PlayListModel newPlayList =
+//   //     PlayListModel(playListName: newName, playlistId: oldPlayList.playlistId);
+//   // await playlistDb.put(oldPlayList.key, newPlayList);
+//   getAllPlaylist();
+// }
+
+songAddToPlaylist(String playlistName, SongModel song) async {
+  final Box<PlayListModel> playlistDb =
+      await Hive.openBox<PlayListModel>('play_list_db');
+  PlayListModel data = playlistDb.get(playlistName)!;
+  data.playlistId.add(song.id);
+  playlistDb.put(playlistName, data);
+  for (EachPlaylist value in playlistNotifier.value) {
+    if (value.name == playlistName) {
+      value.container.add(song);
+      break;
     }
   }
 }
+
+// getAllPlaylistSongs(String playListName) async {
+//   List<int> playListSongId = [];
+//   final playlistDb = await Hive.openBox<PlayListModel>('play_list_db');
+//   for (var element in playlistDb.values) {
+//     if (element.playListName == playListName) {
+//       log(element.playlistId!.length.toString());
+//       playListSongId.addAll(element.playlistId!);
+//     }
+//   }
+//   for (var i = 0; i < allsongs.length; i++) {
+//     for (var j = 0; j < playListSongId.length; j++) {
+//       if (allsongs[i].id == playListSongId[j].toString()) {
+//         playListNotifierSongModel.value.add(allsongs[i]);
+//       }
+//     }
+//   }
+// }

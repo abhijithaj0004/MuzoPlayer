@@ -8,7 +8,7 @@ class PlayList extends StatelessWidget {
   final TextEditingController editController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    getAllPlaylist();
+    // getAllPlaylist();
     return Scaffold(
       body: Stack(children: [
         Container(
@@ -46,13 +46,16 @@ class PlayList extends StatelessWidget {
                     fontSize: 20,
                     fontWeight: FontWeight.bold),
               ),
+              SizedBox(
+                width: 100,
+              ),
             ],
           ),
         ),
         Padding(
           padding: const EdgeInsets.only(left: 20.0, top: 100, right: 20),
           child: ValueListenableBuilder(
-              valueListenable: playList,
+              valueListenable: playlistNotifier,
               builder: (context, playlistValue, child) {
                 if (playlistValue.isEmpty) {
                   return const Center(
@@ -76,10 +79,12 @@ class PlayList extends StatelessWidget {
                         child: Center(
                           child: ListTile(
                             onTap: () {
-                              getAllPlaylistSongs(
-                                  playlistValue[index].playListName);
+                              // getAllPlaylistSongs(
+                              //     playlistNotifier.value[index].name);
+
                               Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => InsidePlaylist(),
+                                builder: (context) => InsidePlaylist(
+                                    playlist: playlistNotifier.value[index]),
                               ));
                             },
                             leading: SizedBox(
@@ -96,7 +101,7 @@ class PlayList extends StatelessWidget {
                             title: Padding(
                               padding: const EdgeInsets.only(left: 10.0),
                               child: Text(
-                                playlistValue[index].playListName,
+                                playlistNotifier.value[index].name,
                                 overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(
                                     fontSize: 20, fontFamily: 'KumbhSans'),
@@ -120,6 +125,7 @@ class PlayList extends StatelessWidget {
                                                       value.isEmpty) {
                                                     return 'Name is required';
                                                   }
+                                                  return null;
                                                 },
                                                 controller: editController,
                                                 decoration: InputDecoration(
@@ -129,16 +135,18 @@ class PlayList extends StatelessWidget {
                                             actions: [
                                               TextButton.icon(
                                                   onPressed: () {
-                                                    if (_key.currentState!
-                                                        .validate()) {
-                                                      updatePlaylistname(
-                                                          editController.text
-                                                              .trim(),
-                                                          playlistValue[index]);
+                                                    // if (_key.currentState!
+                                                    //     .validate()) {
+                                                    //   updatePlaylistname(
+                                                    //       editController.text
+                                                    //           .trim(),
+                                                    //     // playlistNotifier.value[index]
 
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                    }
+                                                    //     );
+
+                                                    //   Navigator.of(context)
+                                                    //       .pop();
+                                                    // }
                                                   },
                                                   icon: Icon(
                                                     Icons.check_sharp,
@@ -153,8 +161,8 @@ class PlayList extends StatelessWidget {
                                             ],
                                           );
                                         }))
-                                    : playListPopUp(
-                                        context, playlistValue[index].key);
+                                    : playListPopUp(context,
+                                        playlistNotifier.value[index].name);
                               },
                               itemBuilder: (BuildContext context) {
                                 return <PopupMenuEntry>[
@@ -172,7 +180,7 @@ class PlayList extends StatelessWidget {
                           ),
                         ));
                   },
-                  itemCount: playlistValue.length,
+                  itemCount: playlistNotifier.value.length,
                 );
               }),
         )
@@ -180,7 +188,7 @@ class PlayList extends StatelessWidget {
     );
   }
 
-  Future<dynamic> playListPopUp(BuildContext context, int play) {
+  Future<dynamic> playListPopUp(BuildContext context, String playlistname) {
     return showDialog(
         context: context,
         builder: ((context) {
@@ -192,15 +200,15 @@ class PlayList extends StatelessWidget {
                 children: [
                   TextButton.icon(
                       onPressed: () {
-                        deletePlaylist(play);
+                        deletePlaylist(playlistname);
 
                         Navigator.of(context).pop();
                       },
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.check,
                         color: Colors.green,
                       ),
-                      label: Text(
+                      label: const Text(
                         'YES',
                         style: TextStyle(color: Colors.black, fontSize: 15),
                       )),
@@ -208,11 +216,11 @@ class PlayList extends StatelessWidget {
                       onPressed: () async {
                         Navigator.of(context).pop();
                       },
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.close_sharp,
                         color: Colors.red,
                       ),
-                      label: Text(
+                      label: const Text(
                         'NO',
                         style: TextStyle(color: Colors.black, fontSize: 15),
                       ))

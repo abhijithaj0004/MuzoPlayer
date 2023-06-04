@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -20,7 +22,7 @@ class TopBeats extends StatelessWidget {
         Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height / 2.5,
-          decoration: BoxDecoration(
+          decoration:const BoxDecoration(
               gradient: LinearGradient(colors: [
                 Color.fromARGB(255, 108, 99, 255),
                 Color.fromARGB(79, 107, 99, 255),
@@ -66,7 +68,7 @@ class TopBeats extends StatelessWidget {
                       physics: const BouncingScrollPhysics(),
                       itemBuilder: (context, index) {
                         return Container(
-                            margin: EdgeInsets.only(bottom: 20),
+                            margin:const EdgeInsets.only(bottom: 20),
                             height: 90,
                             decoration: BoxDecoration(
                                 gradient: const LinearGradient(colors: [
@@ -117,7 +119,7 @@ class TopBeats extends StatelessWidget {
                                   child: Text(
                                     value[index].title,
                                     overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
+                                    style:const TextStyle(
                                         fontSize: 20, fontFamily: 'KumbhSans'),
                                   ),
                                 ),
@@ -133,6 +135,6 @@ class TopBeats extends StatelessWidget {
   }
 
   songListEmpty() {
-    return Center(child: Text('No TopBeats'));
+    return const Center(child: Text('No TopBeats'));
   }
 }

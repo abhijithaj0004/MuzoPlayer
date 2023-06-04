@@ -3,15 +3,17 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:muzo/functions/dbfunctions/playlist_db.dart';
 import 'package:muzo/model/playlistmodel/playlist_model.dart';
 import 'package:muzo/screens/allsongs/allsongs.dart';
+import 'package:muzo/screens/playlist/inside_the_playlist.dart';
+import 'package:on_audio_query/on_audio_query.dart';
 
 class PlayListPopUp extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
-  final int songId;
-  PlayListPopUp({super.key, required this.songId});
+  final SongModel song;
+  PlayListPopUp({super.key, required this.song});
   TextEditingController playlistController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    getAllPlaylist();
+    // getAllPlaylist();
     return Container(
       decoration: const BoxDecoration(
           gradient: LinearGradient(colors: [
@@ -57,22 +59,12 @@ class PlayListPopUp extends StatelessWidget {
                               return null;
                             },
                           ),
-                        ), 
+                        ),
                         actions: [
                           TextButton(
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content: Text('Processing Data')),
-                                );
-
-                                PlayListModel newPlaylist = PlayListModel(
-                                    playListName:
-                                        playlistController.text.trim(),
-                                    playlistId: []);
-
-                                createPlayList(newPlaylist);
+                                createPlayList(playlistController.text.trim());
                                 Navigator.of(context).pop();
                               }
                             },
@@ -107,7 +99,7 @@ class PlayListPopUp extends StatelessWidget {
             ),
             Expanded(
               child: ValueListenableBuilder(
-                  valueListenable: playList,
+                  valueListenable: playlistNotifier,
                   builder: (context, playlistBuild, child) {
                     return ListView.builder(
                       physics:
@@ -117,11 +109,11 @@ class PlayListPopUp extends StatelessWidget {
                           height: 80,
                           child: ListTile(
                             onTap: () {
-                              addToPlaylistDb(
-                                  songId, playlistBuild[index].playListName);
+                              songAddToPlaylist(
+                                  playlistNotifier.value[index].name, song);
                             },
                             title: Text(
-                              playlistBuild[index].playListName,
+                              playlistNotifier.value[index].name,
                               style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 17,

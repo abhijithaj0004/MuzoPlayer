@@ -1,10 +1,8 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:muzo/functions/dbfunctions/fav_db.dart';
-import 'package:muzo/functions/dbfunctions/top_beats_db.dart';
 import 'package:muzo/functions/normalfunctions/playSong.dart';
 import 'package:muzo/screens/allsongs/allsongs.dart';
-import 'package:muzo/screens/favourites/favourites.dart';
 import 'package:muzo/widgets/mini_player.dart';
 import 'package:muzo/widgets/playlist_popup.dart';
 import 'package:on_audio_query/on_audio_query.dart';
@@ -121,7 +119,7 @@ class _SongItemState extends State<SongItem> {
                   });
                 }
               } else {
-                playlistBottomSheet(context, widget.song.id);
+                playlistBottomSheet(context, widget.song);
               }
             },
             itemBuilder: (BuildContext context) {
@@ -170,15 +168,15 @@ class _SongItemState extends State<SongItem> {
       ),
     );
   }
+}
 
-  void playlistBottomSheet(BuildContext context, int songId) {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return PlayListPopUp(
-          songId: songId,
-        );
-      },
-    );
-  }
+void playlistBottomSheet(BuildContext context, SongModel song) {
+  showModalBottomSheet(
+    context: context,
+    builder: (BuildContext context) {
+      return PlayListPopUp(
+        song: song,
+      );
+    },
+  );
 }

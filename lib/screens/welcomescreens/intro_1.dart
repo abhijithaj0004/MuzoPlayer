@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:muzo/screens/welcomescreens/intro_2.dart';
 import 'package:muzo/widgets/ellipse.dart';
@@ -13,7 +11,7 @@ class IntroOne extends StatelessWidget {
     return Scaffold(
         body: Column(
       children: [
-        Container(
+        const SizedBox(
           height: 200,
           child: Stack(
             children: [
@@ -28,7 +26,7 @@ class IntroOne extends StatelessWidget {
         ),
         Expanded(
           child: SingleChildScrollView(
-            physics: ScrollPhysics(parent: BouncingScrollPhysics()),
+            physics: const ScrollPhysics(parent: BouncingScrollPhysics()),
             child: Column(
               children: [
                 Container(
@@ -56,27 +54,27 @@ class IntroOne extends StatelessWidget {
                             fontFamily: 'KumbhSans'))
                   ])),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
-                Text(
+                const Text(
                   'THIS APP ALLOWS YOU TO PLAY \nAND ORGANIZE MUSIC EASILY',
                   style: TextStyle(
                       fontFamily: 'KumbhSans',
                       color: Color.fromARGB(255, 123, 118, 118)),
                 ),
                 Container(
-                  margin: EdgeInsets.only(top: 30, left: 150),
+                  margin: const EdgeInsets.only(top: 30, left: 150),
                   width: MediaQuery.of(context).size.width * .25,
                   decoration: BoxDecoration(
-                      color: Color.fromARGB(255, 103, 61, 255),
+                      color: const Color.fromARGB(255, 103, 61, 255),
                       borderRadius: BorderRadius.circular(50)),
                   child: TextButton(
                     onPressed: () {
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
                           builder: (context) => const IntroTwo()));
                     },
-                    child: Text(
+                    child: const Text(
                       'Next',
                       style: TextStyle(
                           color: Colors.white,

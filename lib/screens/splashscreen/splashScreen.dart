@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:muzo/functions/dbfunctions/playlist_db.dart';
 import 'package:muzo/functions/dbfunctions/top_beats_db.dart';
 import 'package:muzo/model/favmodel/fav_model.dart';
+import 'package:muzo/model/playlistmodel/playlist_class.dart';
+import 'package:muzo/model/playlistmodel/playlist_model.dart';
 import 'package:muzo/screens/allsongs/allsongs.dart';
 import 'package:muzo/screens/favourites/favourites.dart';
 import 'package:muzo/screens/home/homepage.dart';
 import 'package:muzo/screens/home/main_screen.dart';
-import 'package:muzo/screens/topbeats/topbeats.dart';
-
 import 'package:muzo/screens/welcomescreens/intro_1.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-final String loginKey = 'log_in';
+const String loginKey = 'log_in';
 bool hasPermission = false;
 
 class SplashScreen extends StatefulWidget {
@@ -83,8 +84,9 @@ Future<void> fetchAllSongs() async {
 }
 
 fetchRecent() async {
-  fetchFav();
-  fetchmostplayed();
+  await fetchFav();
+  await fetchmostplayed();
+  await fetchPlaylist();
   final Box<int> recentDb = await Hive.openBox('recent_Db');
   List<SongModel> recenttemp = [];
   for (int element in recentDb.values) {
@@ -109,6 +111,23 @@ fetchFav() async {
         break;
       }
     }
+  }
+}
+
+fetchPlaylist() async {
+  final Box<PlayListModel> playlistDb =
+      await Hive.openBox<PlayListModel>('play_list_db');
+  for (PlayListModel data in playlistDb.values) {
+    EachPlaylist value = EachPlaylist(name: data.playListName);
+    if(data.playlistId.isNotEmpty){for (int id in data.playlistId) {
+      for (SongModel song in allsongs) {
+        if (id == song.id) {
+          value.container.add(song);
+          break;
+        }
+      }
+    }}
+    playlistNotifier.value.add(value);
   }
 }
 

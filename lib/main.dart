@@ -5,6 +5,8 @@ import 'package:muzo/model/favmodel/fav_model.dart';
 import 'package:muzo/model/playlistmodel/playlist_model.dart';
 import 'package:muzo/screens/splashscreen/splashScreen.dart';
 
+
+
 Future<void> main(List<String> args) async {
   // add these lines
   WidgetsFlutterBinding.ensureInitialized();
