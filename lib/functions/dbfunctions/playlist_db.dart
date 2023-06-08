@@ -61,12 +61,11 @@ deleteFromPlaylist(String playlistName, SongModel song) async {
       await Hive.openBox<PlayListModel>('play_list_db');
   PlayListModel data = playlistDb.get(playlistName)!;
   data.playlistId.remove(song.id);
-  await playlistDb.put(playlistName, data);
+playlistDb.put(playlistName, data);
   for (EachPlaylist value in playlistNotifier.value) {
     if (value.name == playlistName) {
       value.container.remove(song);
     }
   }
-
   playlistNotifier.notifyListeners();
 }

@@ -67,7 +67,7 @@ class InsidePlaylist extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(left: 20.0, top: 100, right: 20),
           child: ValueListenableBuilder(
-              valueListenable: playListNotifierSongModel,
+              valueListenable: playlistNotifier,
               builder: (context, playlistvalue, _) {
                 return playlist.container.isEmpty
                     ? songIsEmpty()

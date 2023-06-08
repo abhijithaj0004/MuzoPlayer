@@ -226,6 +226,13 @@ class SearchScreen extends StatelessWidget {
                     style: TextStyle(fontSize: 20, fontFamily: 'KumbhSans'),
                   ),
                 ),
+                // trailing: PopupMenuButton(
+                //   itemBuilder: (context) {
+                //     return <PopupMenuEntry>[PopupMenuItem(
+                //       value: 0,
+                //       child: TextButton.icon(onPressed: (){}, icon: icon, label: label))];
+                //   },
+                // ),
               ),
             ));
       },

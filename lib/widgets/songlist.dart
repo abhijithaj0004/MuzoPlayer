@@ -121,6 +121,29 @@ class _SongItemState extends State<SongItem> {
               } else {
                 playlistBottomSheet(context, widget.song);
               }
+              isExistOrNot
+                  ? ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Center(
+                          child: Text(
+                        'Added to favourite',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 17,
+                            fontFamily: 'KumbhSans'),
+                      )),
+                      duration: Duration(seconds: 1),
+                    ))
+                  : ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Center(
+                          child: Text(
+                        'Removed from favourite',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 17,
+                            fontFamily: 'KumbhSans'),
+                      )),
+                      duration: Duration(seconds: 1),
+                    ));
             },
             itemBuilder: (BuildContext context) {
               return <PopupMenuEntry>[
