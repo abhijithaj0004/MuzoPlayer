@@ -11,7 +11,7 @@ class NowPlaying extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:const Color.fromARGB(255, 211, 208, 255),
+      backgroundColor: const Color.fromARGB(255, 211, 208, 255),
       body: player.builderCurrent(builder: (context, playing) {
         ValueNotifier<bool> isLoopOn = ValueNotifier(false);
         ValueNotifier<bool> isShuffleOn = ValueNotifier(false);
@@ -124,7 +124,7 @@ class NowPlaying extends StatelessWidget {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(100),
                           child: Image.asset(
-                            'assets/images/filip-5LhSaUDgtZ8-unsplash.jpg',
+                            'assets/images/allsongs.jpg',
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -150,11 +150,13 @@ class NowPlaying extends StatelessWidget {
                           barHeight: 10,
                           thumbRadius: 10,
                           thumbColor: Colors.white,
-                          baseBarColor:const Color.fromARGB(255, 188, 184, 249),
-                          progressBarColor:const Color.fromARGB(255, 143, 136, 239),
+                          baseBarColor:
+                              const Color.fromARGB(255, 188, 184, 249),
+                          progressBarColor:
+                              const Color.fromARGB(255, 143, 136, 239),
                         );
                       }),
-                 const SizedBox(
+                  const SizedBox(
                     height: 40,
                   ),
                   Row(
@@ -164,7 +166,7 @@ class NowPlaying extends StatelessWidget {
                         onTap: () async {
                           await player.previous();
                         },
-                        child:const Icon(
+                        child: const Icon(
                           Icons.skip_previous,
                           color: Colors.white,
                           size: 80,
@@ -186,7 +188,7 @@ class NowPlaying extends StatelessWidget {
                         onTap: () async {
                           await player.next();
                         },
-                        child:const Icon(
+                        child: const Icon(
                           Icons.skip_next,
                           color: Colors.white,
                           size: 80,
@@ -194,7 +196,7 @@ class NowPlaying extends StatelessWidget {
                       ),
                     ],
                   ),
-                 const SizedBox(
+                  const SizedBox(
                     height: 40,
                   ),
                   Row(

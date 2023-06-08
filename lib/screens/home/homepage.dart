@@ -68,9 +68,7 @@ class HomePage extends StatelessWidget {
                       MaterialPageRoute(builder: (context) => PlayList()));
                 },
                 child: ImageCard(
-                    text: 'PlayLists',
-                    img:
-                        'assets/images/caucasian-woman-s-portrait-isolated-blue-background-multicolored-neon-light-min.jpg'),
+                    text: 'PlayLists', img: 'assets/images/homeimg.jpg'),
               ),
               GestureDetector(
                 onTap: () {
@@ -78,8 +76,7 @@ class HomePage extends StatelessWidget {
                       MaterialPageRoute(builder: (context) => TopBeats()));
                 },
                 child: ImageCard(
-                  img:
-                      'assets/images/close-up-musical-keys-indoors-with-beautiful-lighting-min.jpg',
+                  img: 'assets/images/homeimg.png',
                   text: 'Top Beats',
                 ),
               ),

@@ -151,7 +151,7 @@ class SearchScreen extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(12),
                       child: Image.asset(
-                        'assets/images/filip-5LhSaUDgtZ8-unsplash.jpg',
+                        'assets/images/allsongs.jpg',
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -212,7 +212,7 @@ class SearchScreen extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(12),
                       child: Image.asset(
-                        'assets/images/filip-5LhSaUDgtZ8-unsplash.jpg',
+                        'assets/images/allsongs.jpg',
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -238,7 +238,6 @@ class SearchScreen extends StatelessWidget {
     data.value = allsongs
         .where((song) => song.title.toLowerCase().contains(text.toLowerCase()))
         .toList();
-    // print(data.value);
     data.notifyListeners();
   }
 }

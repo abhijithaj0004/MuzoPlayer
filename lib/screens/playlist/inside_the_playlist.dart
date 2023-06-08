@@ -2,6 +2,7 @@
 
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
+import 'package:muzo/functions/dbfunctions/playlist_db.dart';
 import 'package:muzo/functions/normalfunctions/playSong.dart';
 import 'package:muzo/functions/normalfunctions/song_model_to_audio.dart';
 import 'package:muzo/model/playlistmodel/playlist_class.dart';
@@ -114,7 +115,7 @@ class InsidePlaylist extends StatelessWidget {
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(12),
                                         child: Image.asset(
-                                          'assets/images/filip-5LhSaUDgtZ8-unsplash.jpg',
+                                          'assets/images/allsongs.jpg',
                                           fit: BoxFit.cover,
                                         ),
                                       ),
@@ -137,7 +138,7 @@ class InsidePlaylist extends StatelessWidget {
                                   trailing: PopupMenuButton(
                                     icon: const Icon(Icons.more_vert),
                                     onSelected: (value) {
-                                      playListPopUp(context);
+                                      playListPopUp(context, index);
                                     },
                                     itemBuilder: (BuildContext context) {
                                       return <PopupMenuEntry>[
@@ -165,7 +166,7 @@ class InsidePlaylist extends StatelessWidget {
     );
   }
 
-  Future<dynamic> playListPopUp(BuildContext context) {
+  playListPopUp(BuildContext context, int index) {
     return showDialog(
         context: context,
         builder: ((context) {
@@ -177,6 +178,9 @@ class InsidePlaylist extends StatelessWidget {
                 children: [
                   TextButton.icon(
                       onPressed: () {
+                        deleteFromPlaylist(
+                            playlist.name, playlist.container[index]);
+
                         Navigator.of(context).pop();
                       },
                       icon: const Icon(

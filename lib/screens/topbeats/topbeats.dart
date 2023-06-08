@@ -22,7 +22,7 @@ class TopBeats extends StatelessWidget {
         Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height / 2.5,
-          decoration:const BoxDecoration(
+          decoration: const BoxDecoration(
               gradient: LinearGradient(colors: [
                 Color.fromARGB(255, 108, 99, 255),
                 Color.fromARGB(79, 107, 99, 255),
@@ -68,7 +68,7 @@ class TopBeats extends StatelessWidget {
                       physics: const BouncingScrollPhysics(),
                       itemBuilder: (context, index) {
                         return Container(
-                            margin:const EdgeInsets.only(bottom: 20),
+                            margin: const EdgeInsets.only(bottom: 20),
                             height: 90,
                             decoration: BoxDecoration(
                                 gradient: const LinearGradient(colors: [
@@ -108,7 +108,7 @@ class TopBeats extends StatelessWidget {
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(12),
                                       child: Image.asset(
-                                        'assets/images/filip-5LhSaUDgtZ8-unsplash.jpg',
+                                        'assets/images/allsongs.jpg',
                                         fit: BoxFit.cover,
                                       ),
                                     ),
@@ -119,7 +119,7 @@ class TopBeats extends StatelessWidget {
                                   child: Text(
                                     value[index].title,
                                     overflow: TextOverflow.ellipsis,
-                                    style:const TextStyle(
+                                    style: const TextStyle(
                                         fontSize: 20, fontFamily: 'KumbhSans'),
                                   ),
                                 ),

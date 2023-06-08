@@ -27,13 +27,13 @@ class Favourites extends StatelessWidget {
             ? Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: ListView.builder(
-                  physics:const BouncingScrollPhysics(),
+                  physics: const BouncingScrollPhysics(),
                   itemBuilder: (context, indx) {
                     return Container(
-                      margin:const EdgeInsets.only(bottom: 20),
+                      margin: const EdgeInsets.only(bottom: 20),
                       height: 90,
                       decoration: BoxDecoration(
-                          gradient:const LinearGradient(colors: [
+                          gradient: const LinearGradient(colors: [
                             Color.fromARGB(255, 203, 203, 203),
                             Color.fromARGB(0, 207, 207, 207),
                           ]),
@@ -71,7 +71,7 @@ class Favourites extends StatelessWidget {
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(12),
                                   child: Image.asset(
-                                    'assets/images/filip-5LhSaUDgtZ8-unsplash.jpg',
+                                    'assets/images/allsongs.jpg',
                                     fit: BoxFit.cover,
                                   ),
                                 ),
@@ -82,7 +82,7 @@ class Favourites extends StatelessWidget {
                               child: Text(
                                 favouritelist.value[indx].displayNameWOExt,
                                 overflow: TextOverflow.ellipsis,
-                                style:const TextStyle(
+                                style: const TextStyle(
                                     fontSize: 20, fontFamily: 'KumbhSans'),
                               ),
                             ),
@@ -102,7 +102,7 @@ class Favourites extends StatelessWidget {
                   itemCount: favouritelist.value.length,
                 ),
               )
-            :const Center(
+            : const Center(
                 child: Text('Please add songs to favourites'),
               );
       },
