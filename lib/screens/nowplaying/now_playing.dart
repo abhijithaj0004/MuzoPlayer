@@ -2,7 +2,10 @@ import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:marquee/marquee.dart';
+import 'package:muzo/functions/dbfunctions/fav_db.dart';
 import 'package:muzo/screens/allsongs/allsongs.dart';
+import 'package:muzo/screens/favourites/favourites.dart';
+import 'package:muzo/widgets/mini_player.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 class NowPlaying extends StatelessWidget {
@@ -211,7 +214,7 @@ class NowPlaying extends StatelessWidget {
                             isShuffleOn.value = true;
                             isShuffleOn.notifyListeners();
                           }
-                          player.shuffle;
+                          player.toggleShuffle();
                         },
                         child: CircleAvatar(
                           backgroundColor: Colors.white,
@@ -225,8 +228,7 @@ class NowPlaying extends StatelessWidget {
                                   );
                                 } else {
                                   return const Icon(
-                                    Icons.shuffle,
-                                    color: Color.fromARGB(255, 106, 87, 255),
+                                    Icons.shuffle_on_outlined,
                                   );
                                 }
                               }),
@@ -255,8 +257,7 @@ class NowPlaying extends StatelessWidget {
                                   );
                                 } else {
                                   return const Icon(
-                                    Icons.repeat,
-                                    color: Color.fromARGB(255, 106, 87, 255),
+                                    Icons.repeat_on,
                                   );
                                 }
                               }),
@@ -270,6 +271,13 @@ class NowPlaying extends StatelessWidget {
                           } else {
                             isFavOn.value = true;
                             isFavOn.notifyListeners();
+                            if (!favouritelist.value.contains(id)) {
+                              isFavOn.value = true;
+                              addToFav(id);
+                            } else {
+                              removeFromFav(id);
+                              isFavOn.value = false;
+                            }
                           }
                         },
                         child: CircleAvatar(
@@ -285,7 +293,6 @@ class NowPlaying extends StatelessWidget {
                               } else {
                                 return const Icon(
                                   Icons.favorite,
-                                  color: Color.fromARGB(255, 106, 87, 255),
                                 );
                               }
                             },

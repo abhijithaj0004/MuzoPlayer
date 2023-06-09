@@ -5,6 +5,7 @@ import 'package:muzo/functions/normalfunctions/song_model_to_audio.dart';
 import 'package:muzo/screens/allsongs/allsongs.dart';
 import 'package:muzo/screens/nowplaying/now_playing.dart';
 import 'package:muzo/widgets/mini_player.dart';
+import 'package:muzo/widgets/songlist.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 // ignore: must_be_immutable
@@ -102,7 +103,7 @@ class SearchScreen extends StatelessWidget {
 
   searchEmpty() {
     return Center(
-      child: Text('item not found'),
+      child: Text('Song not found'),
     );
   }
 
@@ -165,6 +166,30 @@ class SearchScreen extends StatelessWidget {
                     style: TextStyle(fontSize: 20, fontFamily: 'KumbhSans'),
                   ),
                 ),
+                trailing: PopupMenuButton(
+                  onSelected: (value) {
+                    playlistBottomSheet(context, data.value[index]);
+                  },
+                  icon: Icon(Icons.more_vert),
+                  itemBuilder: (context) {
+                    return <PopupMenuEntry>[
+                      PopupMenuItem(
+                          value: 0,
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.playlist_add,
+                                color: Colors.grey,
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text('Add to playlist'),
+                            ],
+                          ))
+                    ];
+                  },
+                ),
               ),
             ));
       },
@@ -226,13 +251,34 @@ class SearchScreen extends StatelessWidget {
                     style: TextStyle(fontSize: 20, fontFamily: 'KumbhSans'),
                   ),
                 ),
-                // trailing: PopupMenuButton(
-                //   itemBuilder: (context) {
-                //     return <PopupMenuEntry>[PopupMenuItem(
-                //       value: 0,
-                //       child: TextButton.icon(onPressed: (){}, icon: icon, label: label))];
-                //   },
-                // ),
+                subtitle: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Text(allsongs[index].artist.toString()),
+                ),
+                trailing: PopupMenuButton(
+                  onSelected: (value) {
+                    playlistBottomSheet(context, allsongs[index]);
+                  },
+                  icon: Icon(Icons.more_vert),
+                  itemBuilder: (context) {
+                    return <PopupMenuEntry>[
+                      PopupMenuItem(
+                          value: 0,
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.playlist_add,
+                                color: Colors.grey,
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text('Add to playlist'),
+                            ],
+                          ))
+                    ];
+                  },
+                ),
               ),
             ));
       },

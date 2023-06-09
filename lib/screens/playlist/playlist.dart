@@ -10,6 +10,10 @@ class PlayList extends StatelessWidget {
   Widget build(BuildContext context) {
     // getAllPlaylist();
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: Icon(Icons.playlist_add),
+      ),
       body: Stack(children: [
         Container(
           width: MediaQuery.of(context).size.width,
